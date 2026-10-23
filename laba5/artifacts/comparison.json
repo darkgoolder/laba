@@ -1,0 +1,20 @@
+{
+  "variant": 21,
+  "seed": 1021,
+  "condition": "CPU generator vs GPU generator",
+  "model": "stabilityai/sd-turbo",
+  "revision": "b261bac6fd2cf515557d5d0707481eafa0485ec2",
+  "prompt": "visual for an ecology lecture series, stylized forest canopy seen from above, layered green shapes, soft morning light, no text, no people",
+  "image_size": [
+    512,
+    512
+  ],
+  "sha256_A": "8e1902724af373b03e090516c24775f9ba3fb67ea5b4063905bac38e786e7e43",
+  "sha256_B": "38230f19d177194dd3f675d4fafb159772527d9d55a54284bfe1e76793b3c4f2",
+  "pixel_equal": false,
+  "max_abs_diff": 184,
+  "psnr_db": 15.174142497875824,
+  "verdict": "different",
+  "generation_seconds_A": 0.27,
+  "generation_seconds_B": 0.27
+}
