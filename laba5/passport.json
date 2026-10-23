@@ -1,0 +1,84 @@
+{
+  "lab": "Лабораторная работа № 5. Запуск открытой модели text-to-image",
+  "variant": 21,
+  "context": "Бриф 4: визуал для экологического лектория — полог леса сверху, зелёные слои",
+  "factor": "Устройство генератора случайного шума: CPU против GPU",
+  "goal": "Проверить, совпадают ли изображения SD-Turbo при одинаковом запросе и seed, если генератор шума работает на CPU и GPU.",
+  "hypothesis_before_run": "При одинаковом seed генераторы CPU и GPU могут создавать разные последовательности случайных чисел, поэтому итоговые изображения могут отличаться.",
+  "acceptance_criterion": {
+    "psnr_db_gte": 40.0,
+    "meaning": "PSNR не ниже 40 дБ — практически совпадает; ниже 40 дБ — различие превышает установленный допуск.",
+    "recorded_before_run": true
+  },
+  "model": {
+    "model_id": "stabilityai/sd-turbo",
+    "revision": "b261bac6fd2cf515557d5d0707481eafa0485ec2",
+    "license": "Stability AI Community License Agreement (по методическим указаниям ЛР05); перед использованием вне учебной задачи необходимо проверить актуальные условия LICENSE.md и Acceptable Use Policy."
+  },
+  "generation": {
+    "prompt": "visual for an ecology lecture series, stylized forest canopy seen from above, layered green shapes, soft morning light, no text, no people",
+    "seed": 1021,
+    "steps": 1,
+    "guidance_scale": 0.0,
+    "size": [
+      512,
+      512
+    ],
+    "dtype": "float16 (указано в manifest.json; фактический dtype не проверялся отдельным выводом)",
+    "device": "NVIDIA Tesla T4, 15360 MiB",
+    "baseline_generator_device": "cpu"
+  },
+  "environment": {
+    "platform": "Google Colab",
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "diffusers": "0.41.0",
+    "transformers": "5.20.2",
+    "pillow": "11.3.0",
+    "model_load_seconds": 36.37,
+    "generation_seconds_A_cpu": 0.29,
+    "generation_seconds_B_gpu": 0.29,
+    "notes": [
+      "При первоначальной проверке возникла проблема с версией пакета torchao; после установки/обновления библиотека модели загрузилась.",
+      "Сообщения о torchao, deprecated torch_dtype, local_dir_use_symlinks и анонимном обращении к Hugging Face Hub были предупреждениями; конвейер загрузился и генерация завершилась.",
+      "Время генерации округлено до сотых секунды, поэтому равные значения 0.29 с не доказывают равенство фактической скорости."
+    ]
+  },
+  "comparison_cpu_gpu": {
+    "A": {
+      "generator_device": "cpu",
+      "sha256_png": "8e1902724af373b03e090516c24775f9ba3fb67ea5b4063905bac38e786e7e43"
+    },
+    "B": {
+      "generator_device": "cuda",
+      "sha256_png": "38230f19d177194dd3f675d4fafb159772527d9d55a54284bfe1e76793b3c4f2"
+    },
+    "pixel_equal": false,
+    "max_abs_diff": 184,
+    "psnr_db": 15.174142497875824,
+    "verdict": "different"
+  },
+  "intentional_error_shared_generator": {
+    "method": "Один torch.Generator(device='cpu').manual_seed(1021) использован в двух последовательных вызовах модели.",
+    "pixel_equal": false,
+    "psnr_db": 15.390253250679468,
+    "verdict": "different",
+    "sha256_values_collected": false,
+    "max_abs_diff_collected": false
+  },
+  "artifacts": [
+    "result.png — базовое изображение A (CPU)",
+    "manifest.json — параметры базового запуска",
+    "result_A_cpu.png — изображение A",
+    "result_B_gpu.png — изображение B",
+    "comparison.json — метрики сравнения CPU/GPU",
+    "lab05.ipynb — блокнот Google Colab с кодом и выводами"
+  ],
+  "limitations": [
+    "Сравнение CPU/GPU выполнено один раз на одной видеокарте и в одном сеансе Colab.",
+    "Не проводилась проверка в новом сеансе или на другом GPU.",
+    "Время генерации измерено с ограниченной точностью.",
+    "Для намеренной ошибки не сохранены SHA-256 и максимальная абсолютная разница; доступны pixel_equal, PSNR и verdict.",
+    "Визуальная оценка качественная: оба изображения показывают полог леса, но композиция и расположение деревьев отличаются."
+  ]
+}
